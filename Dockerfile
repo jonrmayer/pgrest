@@ -1,7 +1,8 @@
 FROM debian:jessie
 MAINTAINER Jonathan Mayer <jonathan.mayer@ecountability.co.uk>
 
-ENV POSTGREST_VERSION 0.4.0.0
+ENV POSTGREST_VERSION 0.3.2.0
+
 
 RUN apt-get update && \
     apt-get install -y tar xz-utils wget libpq-dev && \
