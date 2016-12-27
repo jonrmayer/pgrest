@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM debian:jessie
 MAINTAINER Jonathan Mayer <jonathan.mayer@ecountability.co.uk>
 
 ENV POSTGREST_VERSION 0.4.0.0
