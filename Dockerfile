@@ -1,8 +1,11 @@
 FROM debian:jessie
-MAINTAINER Jonathan Mayer <jonathan.mayer@ecountability.co.uk>
 
 ENV POSTGREST_VERSION 0.3.2.0
-
+ENV POSTGREST_SCHEMA ui
+ENV POSTGREST_ANONYMOUS spades
+ENV POSTGREST_JWT_SECRET thisisnotarealsecret
+ENV POSTGREST_MAX_ROWS 1000000
+ENV POSTGREST_POOL 200
 
 RUN apt-get update && \
     apt-get install -y tar xz-utils wget libpq-dev && \
@@ -13,8 +16,12 @@ RUN wget http://github.com/begriffs/postgrest/releases/download/v${POSTGREST_VER
     mv postgrest /usr/local/bin/postgrest && \
     rm postgrest-${POSTGREST_VERSION}-ubuntu.tar.xz
 
-# PostgREST reads /etc/postgrest.conf so map the configuration
-# file in when you run this container
-CMD exec postgrest
+CMD exec postgrest postgres://${PG_ENV_POSTGRES_USER}:${PG_ENV_POSTGRES_PASSWORD}@${PG_PORT_5432_TCP_ADDR}:${PG_PORT_5432_TCP_PORT}/${PG_ENV_POSTGRES_DB} \
+              --port 3000 \
+              --schema ${POSTGREST_SCHEMA} \
+              --anonymous ${POSTGREST_ANONYMOUS} \
+              --pool ${POSTGREST_POOL} \
+              --jwt-secret ${POSTGREST_JWT_SECRET} \
+              --max-rows ${POSTGREST_MAX_ROWS}
 
 EXPOSE 3000
